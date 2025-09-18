@@ -178,15 +178,13 @@ def main():
             case 2:
 
                 pedidos_obtenidos_hoy = session.scalars(
-                    select(Pedido).where(
-                        Pedido.fecha
-                        == str(datetime.now(timezone.utc).strftime("%Y-%m-%d"))
-                    )
+                    select(Pedido).where(Pedido.fecha == str(date.today()))
                 ).all()
 
                 if len(pedidos_obtenidos_hoy) == 0:
                     print("\nNo hay pedidos realizados hoy\n")
                     continue
+
 
                 pedidos_realizados = len(pedidos_obtenidos_hoy)
 
@@ -194,7 +192,7 @@ def main():
                     pedido.monto_total for pedido in pedidos_obtenidos_hoy
                 )
 
-                fecha_hoy = str(datetime.now(timezone.utc).strftime("%Y-%m-%d"))
+                fecha_hoy = str(date.today())
 
                 # Hace una consulta tipo sql, lo que buscar es el producto mas vendido y el menos vendido, desde la tablas Producto, Detalle_Pedido y Pedido cuando la fecha del pedido es hoy y suma la cantidad de los productos vendidos
                 #text_sql_producto_mas_vendido = text(
@@ -234,8 +232,15 @@ def main():
                 print("\nResumen de Ventas\n")
                 print(f"\nPedidos realizados hoy: {pedidos_realizados}")
                 print(f"\nMonto total de ventas: S/{round(total_ventas, 2)}")
-                print(f"\nProducto mas vendido: {producto_mas_vendido[0]} ({producto_mas_vendido[1]} unidades)")
-                print(f"\nProducto menos vendido: {producto_menos_vendido[0]} ({producto_menos_vendido[1]} unidades)")
+                if producto_mas_vendido is None:
+                    print("\nNo se han vendido productos hoy")
+                else:   
+                    print(f"\nProducto mas vendido: {producto_mas_vendido[0]} ({producto_mas_vendido[1]} unidades)")
+
+                if producto_menos_vendido is None:
+                    print("\nNo se han vendido productos hoy")
+                else:
+                    print(f"\nProducto menos vendido: {producto_menos_vendido[0]} ({producto_menos_vendido[1]} unidades)")
             case 3:
                 print("Crear Producto")
                 producto_nuevo = Producto(
