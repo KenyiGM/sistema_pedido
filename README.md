@@ -51,7 +51,7 @@ python main.py
 
 ## Ejemplos:
 
-![Menu principal](img/menu_principal.png.png)
+![Menu principal](img/menu_principal.png)
 
 ![Crear Pedido](img/crear_pedido.png)
 
